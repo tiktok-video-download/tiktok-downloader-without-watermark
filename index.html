@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>TikTok HD video download without watermark</title>
+    <meta name="description" content="Download TikTok videos in HD without watermark for free. Best online TikTok video saver and downloader.">
+    <meta name="keywords" content="TikTok Downloader, No Watermark, HD TikTok Download, TikTok Saver, Download TikTok Video">
+    <link rel="icon" href="https://www.tiktok.com/favicon.ico">
+
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; color: #333; }
+        .container { background: white; padding: 25px; border-radius: 20px; max-width: 450px; margin: 30px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+        h1 { color: #fe2c55; font-size: 22px; margin-bottom: 10px; }
+        input { width: 88%; padding: 15px; margin-bottom: 15px; border: 1.5px solid #ddd; border-radius: 12px; font-size: 16px; outline: none; }
+        .btn { background: #fe2c55; color: white; border: none; padding: 15px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; margin-top: 10px; }
+        
+        #preview-section { display: none; margin-top: 20px; text-align: left; border-top: 2px solid #f0f2f5; padding-top: 20px; }
+        .thumb-container { width: 100%; border-radius: 15px; overflow: hidden; margin-bottom: 15px; background: #000; }
+        #video-thumb { width: 100%; display: block; border-radius: 15px; }
+        .video-title { font-weight: bold; font-size: 16px; color: #fe2c55; display: block; }
+
+        #ad-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 10000; }
+        #timer { position: absolute; top: 25px; right: 25px; color: white; background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 30px; font-weight: bold; }
+        #close-x { display: none; position: absolute; top: 20px; right: 20px; font-size: 30px; color: white; background: #fe2c55; width: 50px; height: 50px; line-height: 48px; border-radius: 50%; cursor: pointer; text-align: center; border: 2px solid white; }
+        #ad-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 250px; background: #111; }
+        .loading { display: none; color: #fe2c55; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>TikTok HD Video Downloader</h1>
+    <p style="font-size: 13px; color: #777;">Download Without Watermark</p>
+    
+    <div id="step-1">
+        <input type="text" id="tiktokUrl" placeholder="Paste TikTok link here...">
+        <div id="loader" class="loading">Fetching HD Video...</div>
+        <button class="btn" onclick="fetchPreview()">Check Video</button>
+    </div>
+
+    <div id="preview-section">
+        <div class="thumb-container"><img id="video-thumb" src=""></div>
+        <span class="video-title" id="v-title"></span>
+        <button class="btn" style="background: #28a745;" onclick="showAds()">Download Full HD</button>
+    </div>
+</div>
+
+<div id="ad-overlay">
+    <div id="timer">Wait: <span id="sec">20</span>s</div>
+    <div id="close-x" onclick="finalDownload()">×</div>
+    <div id="ad-box">
+        <script type="text/javascript">
+            atOptions = { 'key' : '16962db85db2eb0e6411136c0c815a94', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
+        </script>
+        <script type="text/javascript" src="https://www.highperformanceformat.com/16962db85db2eb0e6411136c0c815a94/invoke.js"></script>
+    </div>
+</div>
+
+<script>
+    let hdUrl = ""; 
+    async function fetchPreview() {
+        const url = document.getElementById('tiktokUrl').value;
+        if(!url) return;
+        document.getElementById('loader').style.display = 'block';
+        try {
+            const res = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`);
+            const json = await res.json();
+            if(json.data) {
+                document.getElementById('video-thumb').src = json.data.cover; 
+                document.getElementById('v-title').innerText = "By: " + json.data.author.nickname;
+                hdUrl = json.data.play; 
+                document.getElementById('preview-section').style.display = 'block';
+            }
+        } catch(e) { alert("Error loading video."); }
+        document.getElementById('loader').style.display = 'none';
+    }
+
+    function showAds() {
+        document.getElementById('ad-overlay').style.display = 'block';
+        let t = 20;
+        let c = setInterval(() => {
+            t--; document.getElementById('sec').innerText = t;
+            if(t <= 0) { clearInterval(c); document.getElementById('timer').style.display = 'none'; document.getElementById('close-x').style.display = 'block'; }
+        }, 1000);
+    }
+
+    function finalDownload() {
+        document.getElementById('ad-overlay').style.display = 'none';
+        if(hdUrl) { window.location.href = hdUrl; }
+    }
+</script>
+</body>
+</html>
